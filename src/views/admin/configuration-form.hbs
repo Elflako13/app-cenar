@@ -1,0 +1,23 @@
+<div class="row justify-content-center">
+  <div class="col-md-5">
+    <div class="card shadow">
+      <div class="card-body p-4">
+        <h5>Editar Configuración</h5>
+        <form method="POST">
+          <div class="mb-3">
+            <label class="form-label">Clave</label>
+            <input type="text" class="form-control" value="{{config.key}}" readonly>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Valor</label>
+            <input type="number" step="0.01" name="value" class="form-control" value="{{config.value}}" required>
+          </div>
+          <div class="d-flex gap-2">
+            <a href="/admin/configurations" class="btn btn-secondary">Volver</a>
+            <button type="submit" class="btn btn-danger">Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

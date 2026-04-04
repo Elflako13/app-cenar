@@ -1,0 +1,41 @@
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card shadow">
+      <div class="card-body p-4">
+        <h5>{{#if isEdit}}Editar{{else}}Nuevo{{/if}} Administrador</h5>
+        <form method="POST">
+          <div class="row g-2">
+            <div class="col-6">
+              <label class="form-label">Nombre</label>
+              <input type="text" name="firstName" class="form-control" value="{{admin.firstName}}" required>
+            </div>
+            <div class="col-6">
+              <label class="form-label">Apellido</label>
+              <input type="text" name="lastName" class="form-control" value="{{admin.lastName}}" required>
+            </div>
+            <div class="col-6">
+              <label class="form-label">Usuario</label>
+              <input type="text" name="userName" class="form-control" value="{{admin.userName}}" required>
+            </div>
+            <div class="col-6">
+              <label class="form-label">Correo</label>
+              <input type="email" name="email" class="form-control" value="{{admin.email}}" required>
+            </div>
+            <div class="col-6">
+              <label class="form-label">Contraseña{{#if isEdit}} (dejar vacío para no cambiar){{/if}}</label>
+              <input type="password" name="password" class="form-control" {{#unless isEdit}}required{{/unless}}>
+            </div>
+            <div class="col-6">
+              <label class="form-label">Confirmar Contraseña</label>
+              <input type="password" name="confirmPassword" class="form-control">
+            </div>
+          </div>
+          <div class="d-flex gap-2 mt-3">
+            <a href="/admin/admins" class="btn btn-secondary">Volver</a>
+            <button type="submit" class="btn btn-danger">{{#if isEdit}}Guardar{{else}}Crear{{/if}}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

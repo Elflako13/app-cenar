@@ -1,0 +1,60 @@
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card shadow">
+      <div class="card-body p-4">
+        <h5 class="mb-3">Registrarse como Comercio</h5>
+        <form action="/register-commerce" method="POST" enctype="multipart/form-data">
+          <div class="row g-2">
+            <div class="col-12">
+              <label class="form-label">Nombre del Comercio</label>
+              <input type="text" name="name" class="form-control" required>
+            </div>
+            <div class="col-6">
+              <label class="form-label">Teléfono</label>
+              <input type="text" name="phone" class="form-control" required>
+            </div>
+            <div class="col-6">
+              <label class="form-label">Usuario</label>
+              <input type="text" name="userName" class="form-control" required>
+            </div>
+            <div class="col-12">
+              <label class="form-label">Correo</label>
+              <input type="email" name="email" class="form-control" required>
+            </div>
+            <div class="col-12">
+              <label class="form-label">Logo del Comercio</label>
+              <input type="file" name="logo" class="form-control" accept="image/*" required>
+            </div>
+            <div class="col-6">
+              <label class="form-label">Hora de Apertura</label>
+              <input type="time" name="openingTime" class="form-control" required>
+            </div>
+            <div class="col-6">
+              <label class="form-label">Hora de Cierre</label>
+              <input type="time" name="closingTime" class="form-control" required>
+            </div>
+            <div class="col-12">
+              <label class="form-label">Tipo de Comercio</label>
+              <select name="commerceTypeId" class="form-select" required>
+                <option value="">-- Selecciona --</option>
+                {{#each commerceTypes}}
+                  <option value="{{_id}}">{{name}}</option>
+                {{/each}}
+              </select>
+            </div>
+            <div class="col-6">
+              <label class="form-label">Contraseña</label>
+              <input type="password" name="password" class="form-control" required>
+            </div>
+            <div class="col-6">
+              <label class="form-label">Confirmar Contraseña</label>
+              <input type="password" name="confirmPassword" class="form-control" required>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-danger w-100 mt-3">Registrar Comercio</button>
+        </form>
+        <a href="/login" class="btn btn-link w-100 mt-2">Volver al login</a>
+      </div>
+    </div>
+  </div>
+</div>

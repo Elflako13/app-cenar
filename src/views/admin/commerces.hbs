@@ -1,0 +1,30 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h4>Listado de Comercios</h4>
+</div>
+<div class="table-responsive">
+  <table class="table table-striped table-hover align-middle">
+    <thead class="table-dark">
+      <tr><th>Logo</th><th>Nombre</th><th>Correo</th><th>Teléfono</th><th>Horario</th><th>Pedidos</th><th>Estado</th><th>Acción</th></tr>
+    </thead>
+    <tbody>
+      {{#each commerces}}
+      <tr>
+        <td>{{#if logo}}<img src="{{logo}}" width="40" height="40" class="rounded-circle object-fit-cover">{{else}}<i class="bi bi-shop fs-4"></i>{{/if}}</td>
+        <td>{{name}}</td>
+        <td>{{email}}</td>
+        <td>{{phone}}</td>
+        <td>{{openingTime}} - {{closingTime}}</td>
+        <td>{{orderCount}}</td>
+        <td><span class="badge bg-{{#if isActive}}success{{else}}secondary{{/if}}">{{#if isActive}}Activo{{else}}Inactivo{{/if}}</span></td>
+        <td>
+          <form method="POST" action="/admin/users/{{userId}}/toggle-status" class="d-inline">
+            <button class="btn btn-sm btn-{{#if isActive}}warning{{else}}success{{/if}}">
+              {{#if isActive}}Inactivar{{else}}Activar{{/if}}
+            </button>
+          </form>
+        </td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>

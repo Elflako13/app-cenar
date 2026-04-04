@@ -1,0 +1,71 @@
+<div class="d-flex align-items-center justify-content-between mb-4">
+  <h4 class="fw-bold mb-0"><i class="bi bi-shop text-danger"></i> Perfil del Comercio</h4>
+</div>
+
+<div class="row justify-content-center">
+  <div class="col-lg-7">
+    <div class="card border-0 shadow-sm">
+      <div class="card-body p-4">
+
+        {{!-- Current logo --}}
+        {{#if commerce.logo}}
+          <div class="text-center mb-4">
+            <img src="{{commerce.logo}}" alt="Logo" class="rounded" style="width:100px;height:100px;object-fit:cover;">
+          </div>
+        {{/if}}
+
+        <form action="/commerce/profile" method="POST" enctype="multipart/form-data">
+
+          <div class="row g-3">
+            {{!-- Commerce Name (read-only) --}}
+            <div class="col-12">
+              <label class="form-label fw-semibold">Nombre del Comercio</label>
+              <input type="text" class="form-control" value="{{commerce.name}}" readonly disabled>
+            </div>
+
+            {{!-- Commerce Type (read-only) --}}
+            <div class="col-12">
+              <label class="form-label fw-semibold">Tipo de Comercio</label>
+              <input type="text" class="form-control" value="{{commerce.commerceType.name}}" readonly disabled>
+            </div>
+
+            {{!-- Logo --}}
+            <div class="col-12">
+              <label class="form-label fw-semibold">Logo</label>
+              <input type="file" name="logo" class="form-control" accept="image/*">
+              <small class="text-muted">Deja vacío para conservar el logo actual</small>
+            </div>
+
+            {{!-- Opening & Closing Time --}}
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Horario de Apertura</label>
+              <input type="time" name="openingTime" class="form-control" value="{{commerce.openingTime}}" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Horario de Cierre</label>
+              <input type="time" name="closingTime" class="form-control" value="{{commerce.closingTime}}" required>
+            </div>
+
+            {{!-- Phone --}}
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Teléfono</label>
+              <input type="tel" name="phone" class="form-control" value="{{commerce.user.phone}}" placeholder="Teléfono de contacto">
+            </div>
+
+            {{!-- Email --}}
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Correo Electrónico</label>
+              <input type="email" name="email" class="form-control" value="{{commerce.user.email}}">
+            </div>
+
+            <div class="col-12 d-flex gap-2 justify-content-end">
+              <button type="submit" class="btn btn-danger px-4">
+                <i class="bi bi-save"></i> Guardar Cambios
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

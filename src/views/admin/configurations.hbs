@@ -1,0 +1,16 @@
+<h4 class="mb-3">Configuración del Sistema</h4>
+<div class="table-responsive">
+  <table class="table table-bordered align-middle">
+    <thead class="table-dark"><tr><th>Clave</th><th>Valor</th><th>Descripción</th><th>Acción</th></tr></thead>
+    <tbody>
+      {{#each configs}}
+      <tr>
+        <td><strong>{{key}}</strong></td>
+        <td>{{value}}</td>
+        <td>{{description}}</td>
+        <td><a href="/admin/configurations/{{key}}/edit" class="btn btn-sm btn-outline-primary">Editar</a></td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>

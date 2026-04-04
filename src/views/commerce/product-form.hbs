@@ -1,0 +1,70 @@
+<div class="d-flex align-items-center justify-content-between mb-4">
+  <h4 class="fw-bold mb-0">
+    <i class="bi bi-{{#if isEdit}}pencil{{else}}plus-circle{{/if}} text-danger"></i>
+    {{#if isEdit}}Editar Producto{{else}}Nuevo Producto{{/if}}
+  </h4>
+  <a href="/commerce/products" class="btn btn-outline-secondary btn-sm">
+    <i class="bi bi-arrow-left"></i> Volver
+  </a>
+</div>
+
+<div class="row justify-content-center">
+  <div class="col-lg-7">
+    <div class="card border-0 shadow-sm">
+      <div class="card-body p-4">
+        <form action="/commerce/products/{{#if isEdit}}{{product._id}}/edit{{else}}create{{/if}}" method="POST" enctype="multipart/form-data">
+
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label fw-semibold">Nombre <span class="text-danger">*</span></label>
+              <input type="text" name="name" class="form-control" value="{{product.name}}" placeholder="Nombre del producto" required>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label fw-semibold">Descripción</label>
+              <textarea name="description" class="form-control" rows="3" placeholder="Descripción del producto">{{product.description}}</textarea>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Precio (RD$) <span class="text-danger">*</span></label>
+              <input type="number" name="price" class="form-control" value="{{product.price}}" min="0" step="0.01" placeholder="0.00" required>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Categoría <span class="text-danger">*</span></label>
+              <select name="category" class="form-select" required>
+                <option value="">-- Seleccionar --</option>
+                {{#each categories}}
+                  <option value="{{_id}}" {{#if (eq (json ../product.category) (json _id))}}selected{{/if}}>{{name}}</option>
+                {{/each}}
+              </select>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label fw-semibold">Imagen del Producto</label>
+              {{#if isEdit}}
+                {{#if product.image}}
+                  <div class="mb-2">
+                    <img src="{{product.image}}" alt="Imagen actual" class="rounded" style="width:80px;height:80px;object-fit:cover;">
+                    <small class="text-muted ms-2">Imagen actual</small>
+                  </div>
+                {{/if}}
+                <input type="file" name="image" class="form-control" accept="image/*">
+                <small class="text-muted">Deja vacío para conservar la imagen actual</small>
+              {{else}}
+                <input type="file" name="image" class="form-control" accept="image/*">
+              {{/if}}
+            </div>
+
+            <div class="col-12 d-flex gap-2 justify-content-end">
+              <a href="/commerce/products" class="btn btn-outline-secondary">Cancelar</a>
+              <button type="submit" class="btn btn-danger">
+                <i class="bi bi-save"></i> {{#if isEdit}}Actualizar{{else}}Crear{{/if}}
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

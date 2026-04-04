@@ -1,0 +1,43 @@
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-5">
+    <div class="d-flex align-items-center mb-4 gap-2">
+      <a href="/client/addresses" class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-arrow-left"></i> Volver
+      </a>
+      <h4 class="mb-0 ms-2 fw-bold text-danger">Eliminar Dirección</h4>
+    </div>
+
+    <div class="card shadow-sm border-danger border-2">
+      <div class="card-body p-4 text-center">
+        <div class="mb-3">
+          <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size:3rem;"></i>
+        </div>
+        <h5 class="fw-bold mb-2">¿Está seguro que desea eliminar esta dirección?</h5>
+        <p class="text-muted mb-1">Esta acción no se puede deshacer.</p>
+
+        <div class="alert alert-light border mt-3 text-start mb-4">
+          <div class="fw-semibold mb-1">
+            <i class="bi bi-bookmark-fill text-danger"></i> {{address.label}}
+          </div>
+          <div class="small text-muted">
+            {{address.street}}, {{address.sector}}, {{address.city}}
+            {{#if address.reference}}
+              <br>Ref: {{address.reference}}
+            {{/if}}
+          </div>
+        </div>
+
+        <div class="d-flex gap-3 justify-content-center">
+          <a href="/client/addresses" class="btn btn-outline-secondary px-4">
+            <i class="bi bi-x-lg"></i> Cancelar
+          </a>
+          <form method="POST" action="/client/addresses/{{address._id}}/delete">
+            <button type="submit" class="btn btn-danger px-4">
+              <i class="bi bi-trash3-fill"></i> Sí, eliminar
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

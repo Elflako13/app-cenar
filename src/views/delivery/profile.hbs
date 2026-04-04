@@ -1,0 +1,57 @@
+<div class="d-flex align-items-center justify-content-between mb-4">
+  <h4 class="fw-bold mb-0"><i class="bi bi-person-circle text-danger"></i> Mi Perfil</h4>
+  <a href="/delivery" class="btn btn-outline-secondary btn-sm">
+    <i class="bi bi-arrow-left"></i> Volver
+  </a>
+</div>
+
+<div class="row justify-content-center">
+  <div class="col-lg-6">
+    <div class="card border-0 shadow-sm">
+      <div class="card-body p-4">
+
+        {{!-- Current profile image --}}
+        <div class="text-center mb-4">
+          {{#if profileUser.profileImage}}
+            <img src="{{profileUser.profileImage}}" alt="Foto de perfil" class="rounded-circle" style="width:90px;height:90px;object-fit:cover;">
+          {{else}}
+            <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center" style="width:90px;height:90px;">
+              <i class="bi bi-person-fill text-muted" style="font-size:2.5rem;"></i>
+            </div>
+          {{/if}}
+        </div>
+
+        <form action="/delivery/profile" method="POST" enctype="multipart/form-data">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Nombre</label>
+              <input type="text" name="firstName" class="form-control" value="{{profileUser.firstName}}" placeholder="Nombre" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Apellido</label>
+              <input type="text" name="lastName" class="form-control" value="{{profileUser.lastName}}" placeholder="Apellido" required>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label fw-semibold">Teléfono</label>
+              <input type="tel" name="phone" class="form-control" value="{{profileUser.phone}}" placeholder="Teléfono">
+            </div>
+
+            <div class="col-12">
+              <label class="form-label fw-semibold">Foto de Perfil</label>
+              <input type="file" name="profileImage" class="form-control" accept="image/*">
+              <small class="text-muted">Deja vacío para conservar la imagen actual</small>
+            </div>
+
+            <div class="col-12 d-flex gap-2 justify-content-end">
+              <a href="/delivery" class="btn btn-outline-secondary">Cancelar</a>
+              <button type="submit" class="btn btn-danger">
+                <i class="bi bi-save"></i> Guardar Cambios
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

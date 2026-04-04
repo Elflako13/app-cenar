@@ -1,0 +1,82 @@
+<div class="d-flex align-items-center mb-3 gap-2">
+  <a href="/client" class="btn btn-outline-secondary btn-sm">
+    <i class="bi bi-arrow-left"></i> Volver
+  </a>
+  <h4 class="mb-0 ms-2 fw-bold">{{commerceType.name}}</h4>
+  <span class="badge bg-secondary ms-1">{{commerces.length}} comercios</span>
+</div>
+
+{{!-- Search form --}}
+<form method="GET" action="/client/commerces" class="mb-4">
+  <input type="hidden" name="typeId" value="{{commerceType._id}}">
+  <div class="input-group" style="max-width:420px;">
+    <input type="text" class="form-control" name="search" placeholder="Buscar comercio..." value="{{search}}">
+    <button class="btn btn-danger" type="submit">
+      <i class="bi bi-search"></i>
+    </button>
+    {{#if search}}
+      <a href="/client/commerces?typeId={{commerceType._id}}" class="btn btn-outline-secondary">
+        <i class="bi bi-x-lg"></i>
+      </a>
+    {{/if}}
+  </div>
+</form>
+
+{{#if commerces.length}}
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+    {{#each commerces}}
+      <div class="col">
+        <div class="card h-100 shadow-sm border-0 position-relative">
+          {{!-- Favorite button --}}
+          <div class="position-absolute top-0 end-0 m-2" style="z-index:10;">
+            {{#if isFavorite}}
+              <form method="POST" action="/client/favorites/remove">
+                <input type="hidden" name="commerceId" value="{{_id}}">
+                <button type="submit" class="btn btn-sm btn-light rounded-circle shadow-sm" title="Quitar favorito">
+                  <i class="bi bi-heart-fill text-danger"></i>
+                </button>
+              </form>
+            {{else}}
+              <form method="POST" action="/client/favorites/add">
+                <input type="hidden" name="commerceId" value="{{_id}}">
+                <button type="submit" class="btn btn-sm btn-light rounded-circle shadow-sm" title="Agregar a favoritos">
+                  <i class="bi bi-heart text-danger"></i>
+                </button>
+              </form>
+            {{/if}}
+          </div>
+
+          <a href="/client/commerce/{{_id}}/catalog" class="text-decoration-none text-dark">
+            {{#if logo}}
+              <img src="{{logo}}" class="card-img-top" alt="{{name}}" style="height:160px;object-fit:cover;">
+            {{else}}
+              <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height:160px;">
+                <i class="bi bi-shop text-muted display-4"></i>
+              </div>
+            {{/if}}
+            <div class="card-body">
+              <h6 class="card-title fw-semibold mb-1">{{name}}</h6>
+              {{#if description}}
+                <p class="card-text text-muted small mb-1">{{description}}</p>
+              {{/if}}
+              <small class="text-muted">
+                <i class="bi bi-clock"></i> {{openingTime}} – {{closingTime}}
+              </small>
+            </div>
+          </a>
+        </div>
+      </div>
+    {{/each}}
+  </div>
+{{else}}
+  <div class="text-center py-5">
+    <i class="bi bi-shop display-1 text-muted"></i>
+    <p class="mt-3 text-muted">
+      {{#if search}}
+        No se encontraron comercios con "{{search}}".
+      {{else}}
+        No hay comercios disponibles en esta categoría.
+      {{/if}}
+    </p>
+  </div>
+{{/if}}

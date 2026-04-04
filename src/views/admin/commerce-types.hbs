@@ -1,0 +1,22 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h4>Tipos de Comercio</h4>
+  <a href="/admin/commerce-types/create" class="btn btn-danger"><i class="bi bi-plus"></i> Nuevo Tipo</a>
+</div>
+<div class="table-responsive">
+  <table class="table table-striped align-middle">
+    <thead class="table-dark"><tr><th>Icono</th><th>Nombre</th><th>Comercios</th><th>Acciones</th></tr></thead>
+    <tbody>
+      {{#each types}}
+      <tr>
+        <td>{{#if icon}}<img src="{{icon}}" width="40" height="40" class="object-fit-contain">{{else}}<i class="bi bi-shop"></i>{{/if}}</td>
+        <td>{{name}}</td>
+        <td>{{commerceCount}}</td>
+        <td>
+          <a href="/admin/commerce-types/{{_id}}/edit" class="btn btn-sm btn-outline-primary me-1">Editar</a>
+          <a href="/admin/commerce-types/{{_id}}/delete" class="btn btn-sm btn-outline-danger">Eliminar</a>
+        </td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>

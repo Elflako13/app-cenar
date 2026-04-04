@@ -1,0 +1,34 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h4>Administradores</h4>
+  <a href="/admin/admins/create" class="btn btn-danger"><i class="bi bi-plus"></i> Nuevo Admin</a>
+</div>
+<div class="table-responsive">
+  <table class="table table-striped table-hover align-middle">
+    <thead class="table-dark">
+      <tr><th>Nombre</th><th>Apellido</th><th>Usuario</th><th>Correo</th><th>Estado</th><th>Acciones</th></tr>
+    </thead>
+    <tbody>
+      {{#each admins}}
+      <tr>
+        <td>{{firstName}}</td>
+        <td>{{lastName}}</td>
+        <td>{{userName}}</td>
+        <td>{{email}}</td>
+        <td><span class="badge bg-{{#if isActive}}success{{else}}secondary{{/if}}">{{#if isActive}}Activo{{else}}Inactivo{{/if}}</span></td>
+        <td>
+          {{#if (and (not isDefault) (ne _id ../user.id))}}
+            <a href="/admin/admins/{{_id}}/edit" class="btn btn-sm btn-outline-primary me-1">Editar</a>
+            <form method="POST" action="/admin/admins/{{_id}}/toggle-status" class="d-inline">
+              <button class="btn btn-sm btn-{{#if isActive}}warning{{else}}success{{/if}}">
+                {{#if isActive}}Inactivar{{else}}Activar{{/if}}
+              </button>
+            </form>
+          {{else}}
+            <span class="text-muted small">No editable</span>
+          {{/if}}
+        </td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>

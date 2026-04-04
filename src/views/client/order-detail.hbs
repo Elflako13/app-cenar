@@ -1,0 +1,99 @@
+<div class="d-flex align-items-center mb-4 gap-2">
+  <a href="/client/orders" class="btn btn-outline-secondary btn-sm">
+    <i class="bi bi-arrow-left"></i> Mis Pedidos
+  </a>
+  <h4 class="mb-0 ms-2 fw-bold">Detalle del Pedido</h4>
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-8">
+    {{!-- Commerce & status header --}}
+    <div class="card shadow-sm border-0 mb-4">
+      <div class="card-body">
+        <div class="d-flex align-items-center gap-3">
+          {{#if order.commerce.logo}}
+            <img src="{{order.commerce.logo}}" alt="{{order.commerce.name}}" class="rounded" style="width:60px;height:60px;object-fit:cover;">
+          {{else}}
+            <div class="bg-light rounded d-flex align-items-center justify-content-center" style="width:60px;height:60px;">
+              <i class="bi bi-shop text-muted fs-3"></i>
+            </div>
+          {{/if}}
+          <div class="flex-grow-1">
+            <h5 class="fw-bold mb-1">{{order.commerce.name}}</h5>
+            <small class="text-muted"><i class="bi bi-calendar3"></i> {{formatDate order.createdAt}}</small>
+          </div>
+          <span class="badge fs-6 bg-{{statusClass order.status}}">{{statusLabel order.status}}</span>
+        </div>
+      </div>
+    </div>
+
+    {{!-- Products --}}
+    <div class="card shadow-sm border-0 mb-4">
+      <div class="card-header bg-white fw-bold border-bottom">
+        <i class="bi bi-box-seam text-danger"></i> Productos
+      </div>
+      <div class="list-group list-group-flush">
+        {{#each order.items}}
+          <div class="list-group-item px-3 py-3">
+            <div class="d-flex align-items-center gap-3">
+              {{#if product.image}}
+                <img src="{{product.image}}" alt="{{name}}" class="rounded" style="width:52px;height:52px;object-fit:cover;">
+              {{else}}
+                <div class="bg-light rounded d-flex align-items-center justify-content-center flex-shrink-0" style="width:52px;height:52px;">
+                  <i class="bi bi-image text-muted"></i>
+                </div>
+              {{/if}}
+              <div class="flex-grow-1">
+                <div class="fw-semibold">{{name}}</div>
+                <small class="text-muted">RD$ {{price}} × {{quantity}}</small>
+              </div>
+              <div class="fw-bold text-danger">
+                RD$ {{multiply price quantity}}
+              </div>
+            </div>
+          </div>
+        {{/each}}
+      </div>
+    </div>
+
+    {{!-- Address --}}
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-white fw-bold border-bottom">
+        <i class="bi bi-geo-alt text-danger"></i> Dirección de entrega
+      </div>
+      <div class="card-body">
+        <p class="mb-1 fw-semibold">{{order.addressSnapshot.label}}</p>
+        <p class="mb-0 text-muted">
+          {{order.addressSnapshot.street}}, {{order.addressSnapshot.sector}}, {{order.addressSnapshot.city}}
+          {{#if order.addressSnapshot.reference}}
+            <br><small>Ref: {{order.addressSnapshot.reference}}</small>
+          {{/if}}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  {{!-- RIGHT: Summary --}}
+  <div class="col-lg-4">
+    <div class="card shadow-sm border-0 sticky-top" style="top:80px;">
+      <div class="card-header bg-danger text-white fw-bold">
+        <i class="bi bi-receipt"></i> Resumen
+      </div>
+      <div class="card-body">
+        <div class="d-flex justify-content-between mb-2">
+          <span class="text-muted">Subtotal</span>
+          <span>RD$ {{order.subtotal}}</span>
+        </div>
+        <div class="d-flex justify-content-between mb-2 text-muted">
+          <span>ITBIS ({{order.itbisPercentage}}%)</span>
+          <span>RD$ {{order.itbisAmount}}</span>
+        </div>
+        <hr>
+        <div class="d-flex justify-content-between fw-bold fs-5">
+          <span>Total</span>
+          <span class="text-danger">RD$ {{order.total}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

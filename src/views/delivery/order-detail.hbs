@@ -1,0 +1,94 @@
+<div class="d-flex align-items-center justify-content-between mb-4">
+  <h4 class="fw-bold mb-0"><i class="bi bi-receipt text-danger"></i> Detalle del Pedido</h4>
+  <a href="/delivery" class="btn btn-outline-secondary btn-sm">
+    <i class="bi bi-arrow-left"></i> Volver
+  </a>
+</div>
+
+<div class="row g-4">
+  {{!-- Order Info --}}
+  <div class="col-lg-4">
+    <div class="card border-0 shadow-sm">
+      <div class="card-header bg-danger text-white fw-semibold">
+        <i class="bi bi-info-circle"></i> Información del Pedido
+      </div>
+      <div class="card-body">
+        <p class="mb-1"><strong>Estado:</strong> <span class="badge bg-{{statusClass order.status}}">{{statusLabel order.status}}</span></p>
+        <p class="mb-1"><strong>Fecha:</strong> {{formatDate order.createdAt}}</p>
+        <p class="mb-1"><strong>Comercio:</strong> {{order.commerce.name}}</p>
+        <p class="mb-1"><strong>Subtotal:</strong> RD$ {{order.subtotal}}</p>
+        <p class="mb-1"><strong>ITBIS ({{order.itbisPercentage}}%):</strong> RD$ {{order.itbisAmount}}</p>
+        <p class="mb-0 fw-bold text-danger"><strong>Total:</strong> RD$ {{order.total}}</p>
+      </div>
+    </div>
+
+    {{!-- Address -- only if not completed --}}
+    {{#if showAddress}}
+      <div class="card border-0 shadow-sm mt-3">
+        <div class="card-header bg-secondary text-white fw-semibold">
+          <i class="bi bi-geo-alt"></i> Dirección de Entrega
+        </div>
+        <div class="card-body">
+          {{#if order.addressSnapshot.label}}<p class="mb-1"><strong>Etiqueta:</strong> {{order.addressSnapshot.label}}</p>{{/if}}
+          <p class="mb-1"><strong>Calle:</strong> {{order.addressSnapshot.street}}</p>
+          {{#if order.addressSnapshot.sector}}<p class="mb-1"><strong>Sector:</strong> {{order.addressSnapshot.sector}}</p>{{/if}}
+          {{#if order.addressSnapshot.city}}<p class="mb-1"><strong>Ciudad:</strong> {{order.addressSnapshot.city}}</p>{{/if}}
+          {{#if order.addressSnapshot.reference}}<p class="mb-0"><strong>Referencia:</strong> {{order.addressSnapshot.reference}}</p>{{/if}}
+        </div>
+      </div>
+    {{/if}}
+
+    {{!-- Complete Order button --}}
+    {{#if canComplete}}
+      <div class="card border-0 shadow-sm mt-3">
+        <div class="card-body">
+          <p class="text-muted small mb-3">Marca el pedido como completado una vez entregado al cliente.</p>
+          <form action="/delivery/orders/{{order._id}}/complete" method="POST">
+            <button type="submit" class="btn btn-success w-100">
+              <i class="bi bi-check-circle"></i> Completar Pedido
+            </button>
+          </form>
+        </div>
+      </div>
+    {{/if}}
+  </div>
+
+  {{!-- Products --}}
+  <div class="col-lg-8">
+    <div class="card border-0 shadow-sm">
+      <div class="card-header bg-danger text-white fw-semibold">
+        <i class="bi bi-box-seam"></i> Productos del Pedido
+      </div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Producto</th>
+                <th class="text-center">Cantidad</th>
+                <th class="text-end">Precio Unit.</th>
+                <th class="text-end">Subtotal</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each order.items}}
+                <tr>
+                  <td>{{name}}</td>
+                  <td class="text-center">{{quantity}}</td>
+                  <td class="text-end">RD$ {{price}}</td>
+                  <td class="text-end fw-semibold">RD$ {{multiply price quantity}}</td>
+                </tr>
+              {{/each}}
+            </tbody>
+            <tfoot class="table-light">
+              <tr>
+                <td colspan="3" class="text-end fw-bold">Total:</td>
+                <td class="text-end fw-bold text-danger">RD$ {{order.total}}</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

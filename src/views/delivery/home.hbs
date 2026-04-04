@@ -1,0 +1,61 @@
+<div class="d-flex align-items-center justify-content-between mb-4">
+  <h4 class="fw-bold mb-0"><i class="bi bi-bicycle text-danger"></i> Mis Entregas</h4>
+</div>
+
+{{#if orders.length}}
+  <div class="row g-3">
+    {{#each orders}}
+      <div class="col-12">
+        <a href="/delivery/orders/{{_id}}" class="text-decoration-none text-dark">
+          <div class="card shadow-sm border-0 order-card">
+            <div class="card-body">
+              <div class="row align-items-center g-2">
+                {{!-- Logo --}}
+                <div class="col-auto">
+                  {{#if commerce.logo}}
+                    <img src="{{commerce.logo}}" alt="{{commerce.name}}" class="rounded" style="width:56px;height:56px;object-fit:cover;">
+                  {{else}}
+                    <div class="bg-light rounded d-flex align-items-center justify-content-center" style="width:56px;height:56px;">
+                      <i class="bi bi-shop text-muted fs-4"></i>
+                    </div>
+                  {{/if}}
+                </div>
+
+                {{!-- Info --}}
+                <div class="col">
+                  <div class="fw-semibold">{{commerce.name}}</div>
+                  <small class="text-muted">
+                    <i class="bi bi-calendar3"></i> {{formatDate createdAt}}
+                  </small><br>
+                  <small class="text-muted">
+                    <i class="bi bi-box-seam"></i> {{items.length}} producto(s)
+                  </small>
+                </div>
+
+                {{!-- Total & status --}}
+                <div class="col-auto text-end">
+                  <div class="fw-bold text-danger mb-1">RD$ {{total}}</div>
+                  <span class="badge bg-{{statusClass status}}">{{statusLabel status}}</span>
+                </div>
+
+                <div class="col-auto">
+                  <i class="bi bi-chevron-right text-muted"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    {{/each}}
+  </div>
+{{else}}
+  <div class="text-center py-5">
+    <i class="bi bi-bicycle display-1 text-muted"></i>
+    <p class="mt-3 text-muted">No tienes entregas asignadas aún.</p>
+  </div>
+{{/if}}
+
+<style>
+  .order-card { transition: transform 0.15s, box-shadow 0.15s; }
+  .order-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.10) !important; }
+</style>

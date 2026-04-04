@@ -1,0 +1,12 @@
+body { background-color: #f8f9fa; }
+.navbar-brand { font-size: 1.4rem; }
+.card { border-radius: 12px; }
+.commerce-card { cursor: pointer; transition: transform .2s, box-shadow .2s; }
+.commerce-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,.12); }
+.type-card { cursor: pointer; transition: transform .2s; text-align: center; padding: 1.5rem; }
+.type-card:hover { transform: translateY(-4px); }
+.type-card img { width: 64px; height: 64px; object-fit: contain; }
+.product-card img { width: 100%; height: 140px; object-fit: cover; border-radius: 8px 8px 0 0; }
+.cart-sidebar { position: sticky; top: 80px; }
+.order-row { cursor: pointer; }
+.order-row:hover { background-color: #f1f1f1; }

@@ -1,0 +1,232 @@
+<div class="d-flex align-items-center mb-3 gap-2">
+  <a href="/client/commerces" class="btn btn-outline-secondary btn-sm">
+    <i class="bi bi-arrow-left"></i> Volver
+  </a>
+  {{#if commerce.logo}}
+    <img src="{{commerce.logo}}" alt="{{commerce.name}}" class="rounded" style="width:42px;height:42px;object-fit:cover;">
+  {{/if}}
+  <h4 class="mb-0 ms-1 fw-bold">{{commerce.name}}</h4>
+</div>
+
+<div class="row g-4">
+  {{!-- LEFT: Products --}}
+  <div class="col-lg-8">
+    {{#if catalog.length}}
+      {{!-- Category tabs --}}
+      <ul class="nav nav-tabs mb-3" id="catalogTabs" role="tablist">
+        {{#each catalog}}
+          <li class="nav-item" role="presentation">
+            <button class="nav-link {{#if @first}}active{{/if}}"
+              id="tab-{{category._id}}"
+              data-bs-toggle="tab"
+              data-bs-target="#section-{{category._id}}"
+              type="button" role="tab">
+              {{category.name}}
+            </button>
+          </li>
+        {{/each}}
+      </ul>
+
+      <div class="tab-content" id="catalogTabContent">
+        {{#each catalog}}
+          <div class="tab-pane fade {{#if @first}}show active{{/if}}"
+            id="section-{{category._id}}"
+            role="tabpanel">
+            <div class="row row-cols-1 row-cols-sm-2 g-3">
+              {{#each products}}
+                <div class="col">
+                  <div class="card h-100 shadow-sm border-0">
+                    {{#if image}}
+                      <img src="{{image}}" class="card-img-top" alt="{{name}}" style="height:140px;object-fit:cover;">
+                    {{else}}
+                      <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height:140px;">
+                        <i class="bi bi-image text-muted fs-1"></i>
+                      </div>
+                    {{/if}}
+                    <div class="card-body d-flex flex-column">
+                      <h6 class="card-title fw-semibold mb-1">{{name}}</h6>
+                      <p class="card-text text-muted small flex-grow-1">{{description}}</p>
+                      <div class="d-flex align-items-center justify-content-between mt-2">
+                        <span class="fw-bold text-danger">RD$ {{price}}</span>
+                        <button type="button" class="btn btn-sm btn-danger add-to-cart"
+                          data-id="{{_id}}"
+                          data-name="{{name}}"
+                          data-price="{{price}}">
+                          <i class="bi bi-plus-lg"></i> Agregar
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {{/each}}
+            </div>
+          </div>
+        {{/each}}
+      </div>
+    {{else}}
+      <div class="text-center py-5">
+        <i class="bi bi-box-seam display-1 text-muted"></i>
+        <p class="mt-3 text-muted">Este comercio no tiene productos disponibles.</p>
+      </div>
+    {{/if}}
+  </div>
+
+  {{!-- RIGHT: Cart summary --}}
+  <div class="col-lg-4">
+    <div class="card shadow-sm border-0 sticky-top" style="top:80px;">
+      <div class="card-header bg-danger text-white fw-bold">
+        <i class="bi bi-cart3"></i> Tu Pedido
+      </div>
+      <div class="card-body">
+        <div id="cart-empty" class="text-center text-muted py-3">
+          <i class="bi bi-cart-x fs-2"></i>
+          <p class="mt-2 small">Tu carrito está vacío</p>
+        </div>
+
+        <ul class="list-group list-group-flush mb-3" id="cart-items" style="display:none!important;"></ul>
+
+        <hr id="cart-divider" style="display:none;">
+        <div id="cart-totals" style="display:none;">
+          <div class="d-flex justify-content-between small mb-1">
+            <span>Subtotal</span>
+            <span id="cart-subtotal">RD$ 0.00</span>
+          </div>
+          <div class="d-flex justify-content-between small mb-1 text-muted">
+            <span>ITBIS (18%)</span>
+            <span id="cart-itbis">RD$ 0.00</span>
+          </div>
+          <div class="d-flex justify-content-between fw-bold">
+            <span>Total</span>
+            <span id="cart-total">RD$ 0.00</span>
+          </div>
+        </div>
+
+        <button id="btn-checkout" class="btn btn-danger w-100 mt-3" style="display:none;" type="button">
+          <i class="bi bi-bag-check"></i> Continuar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const COMMERCE_ID = '{{commerce._id}}';
+  const ITBIS_RATE  = 0.18;
+  let cart = [];
+
+  // Load cart from sessionStorage scoped to commerce
+  const CART_KEY = 'cart_' + COMMERCE_ID;
+  try { cart = JSON.parse(sessionStorage.getItem(CART_KEY)) || []; } catch(_) {}
+
+  function saveCart() {
+    sessionStorage.setItem(CART_KEY, JSON.stringify(cart));
+  }
+
+  function formatMoney(n) {
+    return 'RD$ ' + parseFloat(n).toFixed(2);
+  }
+
+  function renderCart() {
+    const ul       = document.getElementById('cart-items');
+    const empty    = document.getElementById('cart-empty');
+    const divider  = document.getElementById('cart-divider');
+    const totals   = document.getElementById('cart-totals');
+    const btnChk   = document.getElementById('btn-checkout');
+
+    ul.innerHTML = '';
+
+    if (cart.length === 0) {
+      empty.style.display   = '';
+      ul.style.setProperty('display', 'none', 'important');
+      divider.style.display = 'none';
+      totals.style.display  = 'none';
+      btnChk.style.display  = 'none';
+      return;
+    }
+
+    empty.style.display   = 'none';
+    ul.style.removeProperty('display');
+    divider.style.display = '';
+    totals.style.display  = '';
+    btnChk.style.display  = '';
+
+    let subtotal = 0;
+    cart.forEach((item, idx) => {
+      subtotal += item.price * item.quantity;
+      const li = document.createElement('li');
+      li.className = 'list-group-item px-0 py-1';
+      li.innerHTML = `
+        <div class="d-flex align-items-center justify-content-between gap-2">
+          <span class="small fw-semibold flex-grow-1" style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${item.name}">${item.name}</span>
+          <div class="d-flex align-items-center gap-1 flex-shrink-0">
+            <button class="btn btn-outline-secondary btn-sm px-1 py-0 lh-1 qty-minus" data-idx="${idx}">−</button>
+            <span class="small fw-bold" style="min-width:18px;text-align:center;">${item.quantity}</span>
+            <button class="btn btn-outline-secondary btn-sm px-1 py-0 lh-1 qty-plus" data-idx="${idx}">+</button>
+            <button class="btn btn-outline-danger btn-sm px-1 py-0 lh-1 qty-remove" data-idx="${idx}"><i class="bi bi-trash3"></i></button>
+          </div>
+        </div>
+        <small class="text-muted">${formatMoney(item.price)} c/u — ${formatMoney(item.price * item.quantity)}</small>
+      `;
+      ul.appendChild(li);
+    });
+
+    const itbis = subtotal * ITBIS_RATE;
+    const total  = subtotal + itbis;
+    document.getElementById('cart-subtotal').textContent = formatMoney(subtotal);
+    document.getElementById('cart-itbis').textContent    = formatMoney(itbis);
+    document.getElementById('cart-total').textContent    = formatMoney(total);
+  }
+
+  // Event delegation for cart buttons
+  document.getElementById('cart-items').addEventListener('click', function(e) {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    const idx = parseInt(btn.dataset.idx);
+    if (btn.classList.contains('qty-plus')) {
+      cart[idx].quantity++;
+    } else if (btn.classList.contains('qty-minus')) {
+      cart[idx].quantity--;
+      if (cart[idx].quantity < 1) cart.splice(idx, 1);
+    } else if (btn.classList.contains('qty-remove')) {
+      cart.splice(idx, 1);
+    }
+    saveCart();
+    renderCart();
+  });
+
+  // Add to cart
+  document.querySelectorAll('.add-to-cart').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const id    = this.dataset.id;
+      const name  = this.dataset.name;
+      const price = parseFloat(this.dataset.price);
+      const existing = cart.find(i => i.productId === id);
+      if (existing) {
+        existing.quantity++;
+      } else {
+        cart.push({ productId: id, name, price, quantity: 1 });
+      }
+      saveCart();
+      renderCart();
+
+      // Animate button
+      this.innerHTML = '<i class="bi bi-check-lg"></i> Agregado';
+      this.classList.replace('btn-danger', 'btn-success');
+      setTimeout(() => {
+        this.innerHTML = '<i class="bi bi-plus-lg"></i> Agregar';
+        this.classList.replace('btn-success', 'btn-danger');
+      }, 900);
+    });
+  });
+
+  // Checkout button
+  document.getElementById('btn-checkout').addEventListener('click', function() {
+    if (cart.length === 0) return;
+    const items = cart.map(i => ({ productId: i.productId, quantity: i.quantity }));
+    const url = `/client/checkout?commerceId=${COMMERCE_ID}&items=${encodeURIComponent(JSON.stringify(items))}`;
+    window.location.href = url;
+  });
+
+  // Initial render
+  renderCart();
+</script>
