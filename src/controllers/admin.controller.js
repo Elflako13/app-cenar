@@ -109,20 +109,21 @@ const getCommerces = async (req, res) => {
 // TOGGLE STATUS (clients, deliveries, commerces)
 // ─────────────────────────────────────────────
 const postToggleStatus = async (req, res) => {
+  const back = req.headers.referer || '/admin';
   try {
     const adminId = req.session.user.id;
     const target  = await User.findById(req.params.id);
 
-    if (!target) return res.redirect('back');
-    if (target._id.toString() === adminId) return res.redirect('back');
-    if (target.isDefault) return res.redirect('back');
+    if (!target) return res.redirect(back);
+    if (target._id.toString() === adminId) return res.redirect(back);
+    if (target.isDefault) return res.redirect(back);
 
     target.isActive = !target.isActive;
     await target.save();
 
-    res.redirect('back');
+    res.redirect(back);
   } catch (err) {
-    res.redirect('back');
+    res.redirect(back);
   }
 };
 

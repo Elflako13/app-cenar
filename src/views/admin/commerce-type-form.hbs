@@ -6,12 +6,12 @@
         <form method="POST" enctype="multipart/form-data">
           <div class="mb-3">
             <label class="form-label">Nombre</label>
-            <input type="text" name="name" class="form-control" value="{{type.name}}" required>
+            <input type="text" name="name" class="form-control" value="{{formData.name}}" required>
           </div>
           <div class="mb-3">
             <label class="form-label">Icono{{#if isEdit}} (dejar vacío para mantener el actual){{/if}}</label>
-            {{#if isEdit}}{{#if type.icon}}<img src="{{type.icon}}" width="60" class="mb-2 d-block">{{/if}}{{/if}}
-            <input type="file" name="icon" class="form-control" accept="image/*" {{#unless isEdit}}required{{/unless}}>
+            {{#if isEdit}}{{#if formData.icon}}<img src="{{formData.icon}}" width="60" class="mb-2 d-block">{{/if}}{{/if}}
+            <input type="file" name="icon" class="form-control" accept="image/*">
           </div>
           <div class="d-flex gap-2">
             <a href="/admin/commerce-types" class="btn btn-secondary">Volver</a>

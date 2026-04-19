@@ -76,8 +76,8 @@ const postRegister = async (req, res) => {
       activationTokenExpires: new Date(Date.now() + 24 * 60 * 60 * 1000),
     });
 
-    await sendActivationEmail(email, activationToken);
-    res.render('auth/login', { success: 'Registro exitoso. Revisa tu correo para activar tu cuenta.' });
+    try { await sendActivationEmail(email, activationToken); } catch (e) { console.error('Email error:', e.message); }
+    res.render('auth/login', { success: 'Registro exitoso. Un administrador debe activar tu cuenta.' });
   } catch (err) {
     res.render('auth/register', { error: err.message });
   }
@@ -116,9 +116,9 @@ const postRegisterCommerce = async (req, res) => {
     });
 
     await Commerce.create({ user: user._id, name, phone, logo, openingTime, closingTime, commerceType: commerceTypeId });
-    await sendActivationEmail(email, activationToken);
+    try { await sendActivationEmail(email, activationToken); } catch (e) { console.error('Email error:', e.message); }
 
-    res.render('auth/login', { success: 'Comercio registrado. Revisa tu correo para activar tu cuenta.' });
+    res.render('auth/login', { success: 'Comercio registrado. Un administrador debe activar tu cuenta.' });
   } catch (err) {
     const commerceTypes = await CommerceType.find();
     res.render('auth/register-commerce', { error: err.message, commerceTypes });

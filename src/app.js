@@ -75,4 +75,10 @@ app.use((req, res) => {
   res.status(404).render('error', { layout: false, message: 'Página no encontrada', code: 404 });
 });
 
+// 500
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).render('error', { layout: false, message: err.message || 'Error interno del servidor', code: 500 });
+});
+
 module.exports = app;
