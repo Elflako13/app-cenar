@@ -11,15 +11,15 @@
       <tr>
         <td>{{#if logo}}<img src="{{logo}}" width="40" height="40" class="rounded-circle object-fit-cover">{{else}}<i class="bi bi-shop fs-4"></i>{{/if}}</td>
         <td>{{name}}</td>
-        <td>{{email}}</td>
+        <td>{{user.email}}</td>
         <td>{{phone}}</td>
         <td>{{openingTime}} - {{closingTime}}</td>
         <td>{{orderCount}}</td>
-        <td><span class="badge bg-{{#if isActive}}success{{else}}secondary{{/if}}">{{#if isActive}}Activo{{else}}Inactivo{{/if}}</span></td>
+        <td><span class="badge bg-{{#if user.isActive}}success{{else}}secondary{{/if}}">{{#if user.isActive}}Activo{{else}}Inactivo{{/if}}</span></td>
         <td>
-          <form method="POST" action="/admin/users/{{userId}}/toggle-status" class="d-inline">
-            <button class="btn btn-sm btn-{{#if isActive}}warning{{else}}success{{/if}}">
-              {{#if isActive}}Inactivar{{else}}Activar{{/if}}
+          <form method="POST" action="/admin/users/{{user._id}}/toggle-status" class="d-inline">
+            <button class="btn btn-sm btn-{{#if user.isActive}}warning{{else}}success{{/if}}">
+              {{#if user.isActive}}Inactivar{{else}}Activar{{/if}}
             </button>
           </form>
         </td>
