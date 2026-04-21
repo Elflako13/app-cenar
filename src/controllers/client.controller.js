@@ -366,6 +366,7 @@ const getFavorites = async (req, res) => {
 };
 
 const postAddFavorite = async (req, res) => {
+  const back = req.headers.referer || '/client';
   try {
     const { commerceId } = req.body;
     const clientId = req.session.user.id;
@@ -373,19 +374,20 @@ const postAddFavorite = async (req, res) => {
     if (!exists) {
       await Favorite.create({ client: clientId, commerce: commerceId });
     }
-    res.redirect('back');
+    res.redirect(back);
   } catch (err) {
-    res.redirect('back');
+    res.redirect(back);
   }
 };
 
 const postRemoveFavorite = async (req, res) => {
+  const back = req.headers.referer || '/client/favorites';
   try {
     const { commerceId } = req.body;
     await Favorite.findOneAndDelete({ client: req.session.user.id, commerce: commerceId });
-    res.redirect('back');
+    res.redirect(back);
   } catch (err) {
-    res.redirect('back');
+    res.redirect(back);
   }
 };
 
