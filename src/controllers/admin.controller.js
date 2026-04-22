@@ -24,22 +24,24 @@ const getDashboard = async (req, res) => {
       todayOrders,
       activeCommerces,
       inactiveCommerces,
-      totalClients,
-      totalDeliveries,
+      activeClients,
+      inactiveClients,
+      activeDeliveries,
       totalProducts,
     ] = await Promise.all([
       Order.countDocuments(),
       Order.countDocuments({ createdAt: { $gte: today } }),
       Commerce.countDocuments({ user: { $in: await User.find({ role: commerceRole?._id, isActive: true }).distinct('_id') } }),
       Commerce.countDocuments({ user: { $in: await User.find({ role: commerceRole?._id, isActive: false }).distinct('_id') } }),
-      User.countDocuments({ role: clientRole?._id }),
-      User.countDocuments({ role: deliveryRole?._id }),
+      User.countDocuments({ role: clientRole?._id, isActive: true }),
+      User.countDocuments({ role: clientRole?._id, isActive: false }),
+      User.countDocuments({ role: deliveryRole?._id, isActive: true }),
       Product.countDocuments(),
     ]);
 
     res.render('admin/dashboard', {
       title: 'Dashboard',
-      stats: { totalOrders, todayOrders, activeCommerces, inactiveCommerces, totalClients, totalDeliveries, totalProducts },
+      stats: { totalOrders, todayOrders, activeCommerces, inactiveCommerces, activeClients, inactiveClients, activeDeliveries, totalProducts },
     });
   } catch (err) {
     res.render('admin/dashboard', { title: 'Dashboard', stats: {}, error: err.message });
